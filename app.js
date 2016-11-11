@@ -20,7 +20,7 @@ var login = require('./routes/login');
 var app = express();
 
 // all environments
-app.set('port', process.env.PORT || 3000);
+app.set('port', process.env.PORT || 3000); //run on heroku port when on heroku, 3000 locally
 app.set('views', path.join(__dirname, 'views'));
 app.engine('handlebars', handlebars());
 app.set('view engine', 'handlebars');
@@ -59,7 +59,7 @@ var util       = require('util'),
     server     = http.createServer(app),
     io         = require('socket.io').listen(server);
     gameport   = 8080;
-    server.listen(gameport);
+    server.listen(process.env.PORT || gameport); //process.env.PORT will make it work on heroku
 
 /* Game server code */
 var players;
