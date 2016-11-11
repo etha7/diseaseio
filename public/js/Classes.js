@@ -188,7 +188,8 @@ function Player(pos){
    this.pickup = function(stage, resources){
       var easelShape = this.getEaselShape();
       var resourceCopy = resources.slice(0,resources.length);
-      for (var x of resourceCopy){
+      //for (var x of resourceCopy){
+      for( i = 0; i < resourceCopy.length; i++){
          var pos = x.getPos();
          var pt =  easelShape.globalToLocal(pos.x, pos.y); //hitTest needs coordinates relative to easelShape
          if(easelShape.hitTest(pt.x, pt.y)) //If player is over resource
