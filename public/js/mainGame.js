@@ -328,6 +328,7 @@ function onRemovePlayer(data) {
    };
 
    //Remove the player from remoteplayers array
+   removePlayer.remove(stage); //Global stage
    remotePlayers.splice(remotePlayers.indexOf(removePlayer),1);
 }
 

@@ -134,7 +134,6 @@ function Player(pos){
    Circle.call( this, pos, "red", 20);
     //{x: canvas.width/2, y: canvas.height/2}, "red", 20);
    
-   this.setPos(pos);
 
    this.id;
    this.diseaseZone = new DiseaseZone(this.getPos());
@@ -170,6 +169,7 @@ function Player(pos){
        this.diseaseZone.setPos(pos);
        parentSetPos.call(this, pos); //need call so 'this' is defined as the current Player
    };
+   this.setPos(pos);
 
    //Override inherited add
    var parentAdd = this.add;
@@ -177,9 +177,13 @@ function Player(pos){
       this.diseaseZone.add(stage);
       parentAdd.call(this, stage);
    }
-      
-   
 
+   var parentRemove = this.remove;
+   this.remove = function(stage){
+      this.diseaseZone.remove(stage);
+      parentRemove.call(this, stage);
+   }
+      
    //Check if standing on any resources
    this.pickup = function(stage, resources){
       var easelShape = this.getEaselShape();
