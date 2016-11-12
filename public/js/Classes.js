@@ -155,8 +155,8 @@ function Player(pos){
                                 //element 0;
          return pos;
       }
-      
-      return {x: this.getPos().x, y: this.getPos().y};
+     var pos = {x: this.getPos().x, y: this.getPos().y}; 
+      return pos;
    }
 
    this.getResources = function(){ return this.resources;};
@@ -190,6 +190,8 @@ function Player(pos){
       var resourceCopy = resources.slice(0,resources.length);
       //for (var x of resourceCopy){
       for( i = 0; i < resourceCopy.length; i++){
+         var x = resourceCopy[i]; //current resource
+
          var pos = x.getPos();
          var pt =  easelShape.globalToLocal(pos.x, pos.y); //hitTest needs coordinates relative to easelShape
          if(easelShape.hitTest(pt.x, pt.y)) //If player is over resource
