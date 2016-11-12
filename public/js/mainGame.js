@@ -138,8 +138,6 @@ function pathPlayers(player,deltaTime){
       player.goPath(deltaTime);
       socket.emit("move player", {  x: player.getPos().x,
                                     y: player.getPos().y });
-      console.log("Number of remote players:");
-      console.log(remotePlayers.length);     
       for(i = 0; i < remotePlayers.length; i++) {
          currPlayer = remotePlayers[i];
          newPathPos = currPlayer.goPath(deltaTime);
@@ -153,6 +151,7 @@ function pathPlayers(player,deltaTime){
 
 //Creates a square world of size 1000 that our pathfinding algorithm can use
 function initWorld(){
+ //TODO make size of canvas, resize with canvas
    var size = 1000;
    var world = []
    for(var i = 0; i < size; i++){
@@ -281,13 +280,22 @@ function setEventHandlers() {
 };
 
 function onSocketConnected() {
-   console.log("Client :: Client connected on port : "+gameport);
+   console.log("Client :: Client connected on port : "+gameport); 
    socket.emit("new player", {    x: stage.canvas.width/2, 
                                   y: stage.canvas.height/2 });
 }
 
 function onSocketDisconnect() {
-   console.log("Client :: Client disconnected from port : "+gameport);
+   console.log("Client :: Client disconnected from port : "+gameport); //Global
+   //Clear all remote players/game objects
+
+   //Clear remote Players
+   for( i = 0; i < remotePlayers.length; i++){
+         current = remotePlayers[i];
+         current.remove(stage);
+   }
+   remotePlayers = [];
+
 }
 
 function onNewPlayer(data) {
