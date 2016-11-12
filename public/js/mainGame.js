@@ -76,9 +76,6 @@ function main(){
    /* Multiplayer initialization code */
    //Connect client to server 
    socket = io.connect();
-   console.log("socket:");
-   console.log(socket);
-   //TODO change from localhost
    
    //Initialize remote players 
    remotePlayers = [];
@@ -113,19 +110,7 @@ function main(){
       player.pickup(stage, resources);
 
       //Move along calculated pathfinding path
-
-      var newPathPos;
-      player.goPath(deltaTime);
-      socket.emit("move player", {  x: player.getPos().x,
-                                    y: player.getPos().y});
-              
-      for(i = 0; i < remotePlayers.length; i++) {
-         currPlayer = remotePlayers[i];
-         newPathPos = currPlayer.goPath(deltaTime);
-         socket.emit("move player", {  x: newPathPos.x,
-                                       y: newPathPos.y });
-      }
-
+      pathPlayers(player,deltaTime);
 
       //Update resource text
       resourceText.text = "Resources: "+player.getResources();
@@ -147,6 +132,24 @@ Array.prototype.equals = function( array ) {
 
 //Utility functions:^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+function pathPlayers(player,deltaTime){
+     
+      var newPathPos;
+      player.goPath(deltaTime);
+      socket.emit("move player", {  x: player.getPos().x,
+                                    y: player.getPos().y });
+      console.log("Number of remote players:");
+      console.log(remotePlayers.length);     
+      for(i = 0; i < remotePlayers.length; i++) {
+         currPlayer = remotePlayers[i];
+         newPathPos = currPlayer.goPath(deltaTime);
+
+         //Each player already updates their own position on the server,
+         //this call is unecessary
+         /*socket.emit("move player", {  x: newPathPos.x
+                                       y: newPathPos.y });*/
+      }
+}
 
 //Creates a square world of size 1000 that our pathfinding algorithm can use
 function initWorld(){
@@ -279,12 +282,7 @@ function setEventHandlers() {
 
 function onSocketConnected() {
    console.log("Client :: Client connected on port : "+gameport);
-
-   console.log("emmitting LOCATION");
-   console.log(stage.canvas.width/2);
-
-   socket.emit("new player", {   id: player.id, 
-                                  x: stage.canvas.width/2, 
+   socket.emit("new player", {    x: stage.canvas.width/2, 
                                   y: stage.canvas.height/2 });
 }
 
@@ -298,13 +296,10 @@ function onNewPlayer(data) {
    
    var newPlayer = new Player({x: data.x, y: data.y}); //TODO rewrite player 
 
-   console.log("NEW PLAYER LOCATION");
-   console.log(newPlayer.getPos());
    newPlayer.id = data.id;
+   newPlayer.add(stage); //stage = current stage global
    remotePlayers.push(newPlayer);
 
-   //stage = current stage global
-   newPlayer.add(stage);
 }
 
 function onMovePlayer(data) {
@@ -316,7 +311,6 @@ function onMovePlayer(data) {
    }
 
    movePlayer.setPos({x: data.x, y: data.y});
-
 }
 
 function onRemovePlayer(data) {
