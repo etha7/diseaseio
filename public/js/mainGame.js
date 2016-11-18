@@ -3,8 +3,19 @@
     */
 
 
-/* Import classes */
+/* Multiplayer initialization code */
+//Connect client to server 
+var socket = io.connect();
 
+//INITIALIZE THE Classes API so the defined classes can refer to 
+//the given socket object
+//------------------------------------------------
+var setSocket = require("./Classes").setSocket;
+var getSocket = require("./Classes").getSocket;
+setSocket(socket);
+//------------------------------------------------
+
+/* Import classes */
 //Requiring enabled by browserify
 
 var EaselObject = require("./Classes").EaselObject;
@@ -28,14 +39,14 @@ var stage        = new createjs.Stage("mainCanvas");
 
 var player,
     remotePlayers,
-    deltaTime,
-    socket;
+    deltaTime;
 
 main();
 
 
 function main(){
-   
+  
+
    //Initialize the game world
    var world        = initWorld();
    var background   = initBackground(stage, canvas);
@@ -46,6 +57,10 @@ function main(){
    //player.setCamera(new Camera(player.getPos(), canvas.width, canvas.height));
    var leftJoystick = initJoysticks(stage, player).left;
    var teamButton   = initTeamButton(stage, player);
+
+
+console.log("Getting PLAYER socket");
+console.log(player.socket);
 
    //Initialize array of resource objects and resource text
    var resources    = initResources(stage, canvas);
@@ -73,9 +88,6 @@ function main(){
    }, false);
    
 
-   /* Multiplayer initialization code */
-   //Connect client to server 
-   socket = io.connect();
    
    //Initialize remote players 
    remotePlayers = [];
@@ -230,7 +242,6 @@ function initPlayer(stage){
    player = new Player({x: stage.canvas.width/2, y: stage.canvas.height/2});
    player.add(stage);
 
-
    return player;
 }
 
@@ -277,6 +288,7 @@ function setEventHandlers() {
    socket.on("new player", onNewPlayer);
    socket.on("move player", onMovePlayer);
    socket.on("remove player", onRemovePlayer);
+   socket.on("toggle teams", onToggleTeams); //On button press
 };
 
 function onSocketConnected() {
@@ -302,9 +314,14 @@ function onNewPlayer(data) {
    console.log("Client :: New player "+data.id+"connected on port : "+gameport);
 
    
-   var newPlayer = new Player({x: data.x, y: data.y}); //TODO rewrite player 
+   var newPlayer = new Player({ x: data.x, 
+                                y: data.y 
+                              }); //TODO rewrite player 
 
    newPlayer.id = data.id;
+
+   //Initialize diseaseZone to proper value
+   newPlayer.diseaseZone.setAllowsTeams(data.teams);
    newPlayer.add(stage); //stage = current stage global
    remotePlayers.push(newPlayer);
 
@@ -333,6 +350,12 @@ function onRemovePlayer(data) {
    removePlayer.remove(stage); //Global stage
    remotePlayers.splice(remotePlayers.indexOf(removePlayer),1);
 }
+
+function onToggleTeams(data) {
+   var player = playerById(data.id);
+   player.diseaseZone.invertAllowsTeams();
+}
+
 
 // Multiplayer Helper Functions 
 function playerById(id){

@@ -1,3 +1,5 @@
+/* CRITICAL: This API requires setSocket(s) to be called with a valid socket.io socket
+before classes can be used. */
 
 //Utility functions:------------------------------------------------
 
@@ -7,15 +9,24 @@ Array.prototype.equals = function( array ) {
            this.every( function(this_i,i) { return this_i == array[i] } )  
 }
 
-
 //Utility functions:^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+
+/* The following code is used to initialize the API with a socket */
+var sock;
+function setSocket(s){
+   sock = s;
+}
+function getSocket(){
+   return sock;
+}
 
 //Class definitions:------------------------------------------------
 
 //Base class for all primitive objects that get drawn
 function EaselObject( pos, color){
-
+   this.socket = getSocket();
+   
    this.easelShape = new createjs.Shape();
    this.getEaselShape = function(){ return this.easelShape; };
 
@@ -101,10 +112,10 @@ function DiseaseZone(playerPos){
 
    //Inverts whether the diseaseZone allows teams
    //TODO make property of player
-   this.invertAllowsTeams = function(){
-
+   this.setAllowsTeams = function(bool){
+      this.AllowsTeams = bool;
      //Set to not allow teams
-     if(this.AllowsTeams === true){
+     if(this.AllowsTeams === false){
         this.color = "red";
         this.drawDotted();
      }
@@ -113,7 +124,10 @@ function DiseaseZone(playerPos){
         this.color = "green";
         this.drawDotted();
      }
-     this.AllowsTeams = !this.AllowsTeams;
+   }
+
+   this.invertAllowsTeams = function(){
+      this.setAllowsTeams(!this.AllowsTeams);
    };
    
 }
@@ -301,8 +315,10 @@ function TeamButton(pos, color, player){
 
    this.player = player;
 
+   var thisButton = this;
    this.getEaselShape().on("click", function(e){
       player.diseaseZone.invertAllowsTeams();
+      thisButton.socket.emit("toggle teams", {});
    });
 }
 //Controls ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -323,6 +339,8 @@ function Dragable(pos, color){
 
 
 
+exports.setSocket = setSocket;
+exports.getSocket = getSocket;
 
 //Class definitions:^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 exports.EaselObject = EaselObject;

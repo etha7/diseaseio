@@ -87,6 +87,7 @@ var players;
       client.on("disconnect", onClientDisconnect);
       client.on("new player", onNewPlayer);
       client.on("move player", onMovePlayer);
+      client.on("toggle teams", onToggleTeams);
     }
 
     function onWriteFile(data){
@@ -125,7 +126,9 @@ var players;
       //update all clients but current
       this.broadcast.emit("new player", { id: newPlayer.id, 
                                           x: newPlayer.getPos().x, 
-                                          y: newPlayer.getPos().y });
+                                          y: newPlayer.getPos().y,
+                                      teams: newPlayer.diseaseZone.AllowsTeams
+                                        });
       var i, existingPlayer;
       for (i = 0; i < players.length; i++) {
          existingPlayer = players[i];
@@ -133,7 +136,9 @@ var players;
          //Add existingPlayer to new client
          this.emit("new player", { id: existingPlayer.id,
                                     x: existingPlayer.getPos().x,
-                                    y: existingPlayer.getPos().y });
+                                    y: existingPlayer.getPos().y,
+                                teams: existingPlayer.diseaseZone.AllowsTeams
+                                 });
       };
 
       //Add new player to list of added players
@@ -152,8 +157,19 @@ var players;
 
        this.broadcast.emit("move player", { id: this.id, 
                                              x: movePlayer.getPos().x, 
-                                             y: movePlayer.getPos().y });
+                                             y: movePlayer.getPos().y 
+                                          });
 
+    }
+
+    function onToggleTeams(data){
+      var player = playerById(this.id); //Get requesting player
+      if(!player) {
+         util.log("Player not found: "+this.id);
+         return;
+      };
+      player.diseaseZone.invertAllowsTeams(); //Invert server representation
+      this.broadcast.emit("toggle teams", { id: this.id });
     }
 
     init();
