@@ -26,11 +26,21 @@
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 
+
     <!--Load the AJAX API-->
 
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="../js/xepOnline.jqPlugin.js"></script>
+
+
     <!--<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>-->
     <script type="text/javascript">
+     <!-- This adds the proper namespace on the generated SVG -->
+      function AddNamespace(){
+        var svg = jQuery('#chart_div svg');
+        svg.attr("xmlns", "http://www.w3.org/2000/svg");
+        svg.css('overflow','visible');
+      }
       // Load the Visualization API and the hart package.
       google.charts.load('current', {'packages':['corechart']});
       // Set a callback to run when the Google Visualization API is loaded.
@@ -42,17 +52,27 @@
       function drawRiskChart() {
         
       // Create our data table out of JSON data loaded from server.
-
-
-       var data = google.visualization.arrayToDataTable([
+      var jsonData = $.ajax({
+          url: "json/mapGraph.json",
+          dataType: "json",
+          async: false
+          }).responseText;
+      
+       /*var data = google.visualization.arrayToDataTable([
           ['Percent Chance of Sickness', ''],
           ['5%',  1000],
           ['10%',  1170],
           ['15%',  660],
           ['20%',  1030]
         ]);
+        
+        var jsonData = $.getJSON("json/riskData.json", function(json) {
+            console.log(json); // this will show the info it in firebug console
+        });  
+        */
+        var data = new google.visualization.DataTable(jsonData);
 
-        var options = {
+        /*var options = {
           title: 'Risk vs Reward',
           curveType: 'function',
           vAxis: {
@@ -68,11 +88,31 @@
              }
           },
           legend: { position: 'bottom' }
-        };
-
-        var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+        };*/
+        var options = {
+          title: 'Safe vs Risk',
+          width: 600,
+          height: 400,
+          bar: {groupWidth: "95%"},
+          legend: { position: "none" },
+        }
+        
+        var chart = new google.visualization.BarChart(document.getElementById('chart_div'));
+        google.visualization.events.addListener(chart, 'ready', AddNamespace);
         chart.draw(data, options);        
-        drawToolbar();
+        //drawToolbar();
+
+        <!-- @cloudformatter calls to render the SVG -->
+    
+        <!-- Convert the SVG to PDF and download it -->
+        var click="return xepOnline.Formatter.Format('JSFiddle', {render:'download', srctype:'svg'})";
+        jQuery('#buttons').append('<button onclick="'+ click +'">PDF</button>');
+        <!-- Convert the SVG to PNG@120dpi and open it -->
+        click="return xepOnline.Formatter.Format('JSFiddle', {render:'newwin', mimeType:'image/png', resolution:'120', srctype:'svg'})";
+        jQuery('#buttons').append('<button onclick="'+ click +'">PNG @120dpi</button>');
+        <!-- Convert the SVG to JPG@300dpi and open it -->
+        click="return xepOnline.Formatter.Format('JSFiddle', {render:'newwin', mimeType:'image/jpg', resolution:'300', srctype:'svg'})";
+        jQuery('#buttons').append('<button onclick="'+ click +'">JPG @300dpi</button>');
 
       }
       function drawTrustChart() {
@@ -126,22 +166,6 @@
 
 
       }
-      function drawToolbar() {
-      var components = [
-          {type: 'igoogle', datasource: 'https://spreadsheets.google.com/tq?key=pCQbetd-CptHnwJEfo8tALA',
-           gadget: 'https://www.google.com/ig/modules/pie-chart.xml',
-           userprefs: {'3d': 1}},
-          {type: 'html', datasource: 'https://spreadsheets.google.com/tq?key=pCQbetd-CptHnwJEfo8tALA'},
-          {type: 'csv', datasource: 'https://spreadsheets.google.com/tq?key=pCQbetd-CptHnwJEfo8tALA'},
-          {type: 'htmlcode', datasource: 'https://spreadsheets.google.com/tq?key=pCQbetd-CptHnwJEfo8tALA',
-           gadget: 'https://www.google.com/ig/modules/pie-chart.xml',
-           userprefs: {'3d': 1},
-           style: 'width: 800px; height: 700px; border: 3px solid purple;'}
-      ];
-
-      var container = document.getElementById('toolbar_div');
-      google.visualization.drawToolbar(container, components);
-    };
     </script>
 </head>
 
@@ -177,8 +201,15 @@
                     <h1>Disease.io Data Center</h1>
                     <div class="col-lg-12">
                           <div id="PageContent"> </div>
-                          <div id="chart_div"></div>
-                          <div id="toolbar_div"></div>
+
+                          <div id="JSFiddle">
+                              <div id="chart_div" style="width: 1100px; height: 500px;"></div>
+                          </div>
+                          <div id="buttons" class="buttons"></div>
+                          <hr/>
+                          <div id="help">
+                              <a href="#help" class="btn btn-default" id="help">Help</a>
+                          </div>
                           <div id="RiskContent" style="visibility:hidden;">
                           {{#if riskGraph}}
                           <h2>{{riskGraph.riskTitle}}</h2>
@@ -204,9 +235,7 @@
             </div>
         </div>
         
-         <div id="help">
-             <a href="#help" class="btn btn-default" id="help">Help</a>
-          </div>
+
         <!-- /#page-content-wrapper -->
 
     </div>
