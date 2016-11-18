@@ -4,6 +4,7 @@ var canvasLeft = canvas.offsetLeft,
     canvasTop = canvas.offsetTop;
 var context = canvas.getContext("2d");
 var clickableElements = [];
+var socket;
 
 canvas.width  = window.innerWidth;
 canvas.height = window.innerHeight; 
@@ -16,6 +17,12 @@ function mapMain(){
    
      //Enable touch based interface for mobile devices
    createjs.Touch.enable(stage);
+
+   socket = io.connect();
+ 
+   //Test writing a file
+   socket.emit("write", { filename: "public/testfile.txt", content: "BEEEEEEEEST" });
+   console.log("writing to testfile.txt from client");
 
    //Resize canvas on window resize   
    window.addEventListener('click', function(event) {

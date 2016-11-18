@@ -7,7 +7,7 @@ var express    = require('express');
 var http       = require('http');
 var path       = require('path');
 var handlebars = require('express3-handlebars');
-
+var fs         = require('fs');
 
 //Define all views\webpages
 var index   = require('./routes/index');
@@ -75,10 +75,25 @@ var players;
 
 
     function onSocketConnection(client){
+      
+      //Allow clients to write to server
+      client.on("write", onWriteFile);
+
+      //Game functions
       util.log("Server :: New player has connected : "+client.id);
       client.on("disconnect", onClientDisconnect);
       client.on("new player", onNewPlayer);
       client.on("move player", onMovePlayer);
+    }
+
+    function onWriteFile(data){
+        console.log("Attempting to write to file");
+        var file = data.filename 
+        var content = data.content //String of file to write
+        fs.writeFile(file, content, function(err) {
+            if (err) return console.log(err);
+            console.log("Finished writing "+file+" to server");
+        });
     }
 
     function onClientDisconnect(){
@@ -94,9 +109,7 @@ var players;
       players.splice(players.indexOf(removePlayer), 1);
 
       //Broadcast removed player
-      this.broadcast.emit("disconnect", { id: removePlayer.id, 
-                                           x: removePlayer.getPos().x, 
-                                           y: removePlayer.getPos().y });
+      this.broadcast.emit("remove player", { id: removePlayer.id });
 
     }
 
@@ -104,7 +117,6 @@ var players;
 
       console.log("Server :: New player id: "+this.id);
       var newPlayer = new Player({x: data.x, y: data.y});
-      console.log("Server :: location: ( "+newPlayer.getPos().x+", "+data.y+")");
       newPlayer.id = this.id;
 
       //update all clients but current

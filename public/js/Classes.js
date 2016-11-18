@@ -221,6 +221,10 @@ function Joystick(pos, player){
    this.stickColor = "white";
    this.stick =  new Circle(this.pos, this.stickColor, this.stickSize);
 
+   //Prevent scrolling
+   this.stick.getEaselShape().on("mousedown", function(e){
+   });
+
    //Limited Dragging
    this.stick.getEaselShape().on("pressmove", function(e){
       e.target.x = e.stageX; //(stageX, stageY) = mouseCoordinate
