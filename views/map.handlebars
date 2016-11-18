@@ -9,15 +9,16 @@
       <link href="css/bootstrap-theme.min.css" rel="stylesheet">
       <link href="css/default.css" rel="stylesheet">
 
-      <body>
+      <body class="mapGame">
       <!-- this is a comment in HTML -->
       <div class="col-md-6 center-block text-center">
-         <h1>Disease.io</h1> <!-- h1 through h5 are headers. The higher the number, the smaller the header -->
-         <h2>You are a citizen! Welcome to the map!!</h2>
+         <h1>disease.io</h1> <!-- h1 through h5 are headers. The higher the number, the smaller the header -->
+         <a href="/index" class="button" id="home-button">Home</a>
+
+         <h4>Please select a city on the map. </h4>
           <div>
-              <a href="/index" class="btn-block btn-primary" id="home-button">Home</a>
-              <a href="/citizen" class="btn-block btn-primary" id="game-start-button"
-              >Collect Resources</a>
+              <a href="/citizen" class="button" id="game-start-button"
+              >Enter City</a>
           </div>
       </div>
       <canvas id="mainCanvas" ></canvas>

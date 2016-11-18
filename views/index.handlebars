@@ -1,3 +1,18 @@
+<style>
+button {
+    background-color: #7bc2fd;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+}
+button:hover{
+    color:#fff;
+    background-color:#a7aeec
+}
+</style>
 <html>
 <head>
    <meta charset="utf-8">
@@ -20,14 +35,26 @@
 
             <h4>Roles:</h4>
             <div id="buttonContainer">
-               <button class="btn btn-primary" id="scientistButton">Scientist</button>
-               <button class="btn btn-primary" id="mapButton"  >Citizen</button>
+              <div class="row">
+                <div class="col-sm-6" style="background-color:yellow;">
+                  <button id="scientistButton">Scientist</button>
+              </div>
+              <div class="col-sm-6" style="background-color:pink;">
+                <button id="mapButton">Citizen</button>
+              </div>
             </div>
+            <br><br><br>
+            <div class="row">
+              <div class="col-sm-6" style="background-color:yellow;">
+                <button id="aboutButton"
+                background:url('url-to-your-image')>What is disease.io?</button>
+              </div>
+              <div class="col-sm-6" style="background-color:pink;">
+                <button id="helpButton"
+                background:url('url-to-your-image')>Learn How to Play</button>
+              </div>
       </div>
-            <div id="bottom-buttonContainer" align="center">
-               <button class="btn btn-primary" id="AboutButton">About</button>
-               <button class="btn btn-primary" id="HelpButton" >Help</button>
-            </div>
+
       <script src="https://code.jquery.com/jquery.js"></script>
       <script src="js/bootstrap.min.js"></script>
       <script src="js/initializeIndex.js"></script>

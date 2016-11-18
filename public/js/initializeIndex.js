@@ -25,5 +25,11 @@ function initializePage() {
                                        });
  $("#cancelButton").click(function(e) {
         window.location.href = "/index";
+                                       }); 
+ $("#aboutButton").click(function(e) {
+        window.location.href = "/about";
+                                       });
+  $("#helpButton").click(function(e) {
+        window.location.href = "/help";
                                        });
 }
