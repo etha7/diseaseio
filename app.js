@@ -10,11 +10,13 @@ var handlebars = require('express3-handlebars');
 var fs         = require('fs');
 
 //Define all views\webpages
-var index   = require('./routes/index');
+var index     = require('./routes/index');
 var scientist = require('./routes/scientist');
-var citizen = require('./routes/citizen');
-var map = require('./routes/map');
-var login = require('./routes/login');
+var citizen   = require('./routes/citizen');
+var map       = require('./routes/map');
+var login     = require('./routes/login');
+var data      = require('./routes/data'); 
+
 
 //Define the app
 var app = express();
@@ -46,6 +48,7 @@ app.get('/scientist', scientist.view);
 app.get('/citizen', citizen.view);
 app.get('/map', map.view);
 app.get('/index', index.view);
+app.get('/data', data.mapInfo);
 
 //app.get('/science/:role', science.view);
 // Example route

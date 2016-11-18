@@ -5,48 +5,77 @@ var canvasLeft = canvas.offsetLeft,
 var context = canvas.getContext("2d");
 var clickableElements = [];
 var socket;
-var safeClicked;
+var safeClicked = true;
 var safeCount = 0;
 var riskCount = 0;
+var jsonSource = "public/json/mapGraph.json";
 canvas.width  = window.innerWidth;
 canvas.height = window.innerHeight; 
 
 mapMain();
 
 function mapMain(){
-       //Initialize the game world
+   //Initialize the game world
    var stage        = new createjs.Stage("mainCanvas")
    
-     //Enable touch based interface for mobile devices
+   //Enable touch based interface for mobile devices
    createjs.Touch.enable(stage);
 
+   //Enable communications with server via socket object
    socket = io.connect();
  
-   //Test writing a file
-   socket.emit("write", { filename: "public/testfile.txt", content: "BEEEEEEEEST" });
-   console.log("writing to testfile.txt from client");
 
    //Read data form mapGraph.json, then write back
    var selectionButton = document.getElementById("game-start-button");
    selectionButton.addEventListener('click', function(event) {
       //var fs = require('fs');
          if(safeClicked) {
-            var json = $.getJSON('../json/mapGraph.json', function(data) {  
-              console.log(data);
-            });
-            safeCount = json["Safe Node"];
+
+            //Read from json source
+            $.get('data', function(data) {  
+            var json = data;
+            console.log(data);
+            
+            //Row, column
+            safeCount = parseInt(json["rows"]["0"]["c"]["1"]["v"]);
+            console.log(safeCount);
             safeCount++;
+            json["rows"]["0"]["c"]["1"]["v"] = safeCount.toString();
+            console.log(JSON.stringify(json));
+
             console.log("Safe count is " + safeCount);
+
+            //Write back to file
+            socket.emit("write", { filename: jsonSource, 
+                                   content:  JSON.stringify(json)
+                                 });
+            console.log("Writing to "+jsonSource+" from client");
+
+            });
          }
          else {
-            var json = $.getJSON('../../json/mapGraph.json', function(data) {         
-                            console.log(data);
-                        });
-            riskCount = json["Risk Node"];
-            riskCount++;
-            console.log("Risk count is " + riskCount);
 
+            //Read from json source
+            $.get('data', function(data) {         
+               console.log(data);
+               var json = data;
+              
+               //Row, column
+               riskCount = parseInt(json["rows"]["1"]["c"]["1"]["v"]);
+               riskCount++;
+               json["rows"]["1"]["c"]["1"]["v"] = riskCount.toString();
+
+               console.log("Risk count is " + riskCount);
+
+               //Write back to file
+               socket.emit("write", { filename: jsonSource, 
+                                      content:  JSON.stringify(json)
+                                    });
+               console.log("Writing to "+jsonSource+"from client");
+
+            });
          }
+  });
 
 
 
@@ -62,7 +91,7 @@ function mapMain(){
             //element.clicked(stage);
         }
     });
-}, false)
+   }, false);
 
 
    //Resize canvas on window resize   
@@ -171,11 +200,6 @@ function easelObject(pos, color){
 
    this.easelShape = new createjs.Shape();
    this.getEaselShape = function(){ return this.easelShape; };
-
-   this.test = function(pos) { this.getEaselShape().x = pos.x; this.getEaselShape().y = pos.y;};
-   this.test({x: 10, y: 11});
-   console.log(this.getEaselShape().x);
-   console.log(this.getEaselShape().y);
 
    //Set initial position
    this.easelShape.x = pos.x;
@@ -445,16 +469,21 @@ function City(pos, baseColor, stage, type, citySelectionText){
    this.height = this.baseSize;
    this.width = this.baseSize;
 
+   var currentThis = this; //Save "this" so we can access it in callbacks
    this.base.getEaselShape().on("click", function(e){
         clickableElements.forEach(function(element) {
           element.unselected(stage);
         });
 
-        if(this.cityType == "Safe") {
+        if(currentThis.cityType == "Safe") { //currentThis is the current City
            safeClicked = true;
+           console.log("Safe: ");
+           console.log(currentThis.cityType);
         }
         else {
            safeClicked = false;
+           console.log("Risky: ");
+           console.log(currentThis.cityType);
         }
         var stickSize = 25;
         var stickColor = "blue";
