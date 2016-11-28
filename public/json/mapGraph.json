@@ -1,0 +1,9 @@
+{
+"cols":[
+    {"type":"string"},{"type":"number"}
+    ],
+"rows":[
+    {"c": [{ "v": "Safe Node"},{"v":35} ]},
+    {"c": [{ "v": "Risk Node"},{"v":12} ]}
+    ]
+}

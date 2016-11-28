@@ -1,3 +1,24 @@
+.mapGame {
+    background-color:black;
+    color:white;
+}
+.button {
+    background-color: #7bc2fd; 
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+}
+
+.button:hover {
+    background-color: #28d056;
+    text-decoration: none;
+    font-weight:bold;
+    color: white;
+}
 .center-block{
 float: none
 }

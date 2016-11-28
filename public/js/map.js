@@ -406,6 +406,7 @@ function City(pos, baseColor, stage, type, citySelectionText){
       this.stickSize = 25;
       this.stickColor = "blue";
       this.stick =  new Circle(this.pos, this.stickColor, this.stickSize);
+
    } else { 
       this.stickSize = 25;
       this.stickColor = baseColor;
@@ -422,6 +423,13 @@ function City(pos, baseColor, stage, type, citySelectionText){
         clickableElements.forEach(function(element) {
           element.unselected(stage);
         });
+
+        if(this.cityType == "Safe") {
+           safeClicked = true;
+        }
+        else {
+           safeClicked = false;
+        }
         var stickSize = 25;
         var stickColor = "blue";
         var stick =  new Circle(pos, stickColor, stickSize);

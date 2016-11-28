@@ -1,0 +1,19 @@
+{
+  "riskGraph": 
+    {
+      "riskTitle": "Safe vs Risk",
+      "riskDescription": "This graph shows the number of people who enter a safe node versus a risk node."
+        
+    },
+  "trustGraph": 
+    {
+      "trustTitle": "Trust",
+      "trustDescription": "This is measured by comparing the percent chance of getting sick with percent who team up."
+        
+    },
+  "moralityGraph": 
+    {
+      "moralityTitle": "Morality",
+      "moralityDescription": "This is measured by comparing the percent sick and on a team with percent sick and not on a team." 
+    }
+}
