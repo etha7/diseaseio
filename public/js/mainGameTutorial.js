@@ -1,15 +1,16 @@
 var video = document.createElement('video');
 video.src = 'videos/gameTutorial.mp4';
-video.autoplay = true;
+//video.autoplay = true;
 video.loop = true;
 video.style.width = "100%";
 
-video.addEventListener('click', function(){
+
+/*video.addEventListener('click', function(){
    video.play();
 }, false);
 
 video.click();
-
+*/
 
 var canvas = document.getElementById('mainCanvas');
 canvas.style.display = "none"; //Hide Canvas
@@ -35,10 +36,18 @@ tutorialDiv.appendChild(description);
 tutorialDiv.appendChild(video);
 tutorialDiv.appendChild(click);
 
+var clicked = false;
 tutorialDiv.onclick = function() {
-   tutorialDiv.style.display = "none";
-   canvas.style.removeProperty('display'); //Show canvas
-   console.log("Exited Tutorial Video");
+   if(!clicked){
+      video.play();
+      clicked = true;
+   }
+   else
+   {
+     tutorialDiv.style.display = "none";
+     canvas.style.removeProperty('display'); //Show canvas
+     console.log("Exited Tutorial Video");
+   }
 }
 
 
