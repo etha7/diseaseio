@@ -1,3 +1,20 @@
+<style>
+button {
+    background-color: #7bc2fd;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+}
+button:hover {
+    background-color: #28d056;
+    text-decoration: none;
+    font-weight:bold;
+    color: white;
+}
+</style>
 <html>
 <head>
    <meta charset="utf-8">
@@ -16,10 +33,16 @@
          <a href="/index" class="button" id="home-button">Home</a>
 
          <h4>Please select a city on the map. </h4>
-          <div>
-              <a href="/citizen" class="button" id="game-start-button"
-              >Enter City</a>
-          </div>
+              <div class="row">
+                <div class="col-sm-6" style="background-color:black;">
+                   <a href="/citizen" class="button" id="game-start-button"
+                   >Enter Your Chosen City</a>
+                </div>
+                <div class="col-sm-6" style="background-color:black;">
+                   <a href="/scientist" class="button" id="scientist-start-button"
+                   >Go To Scientist Section</a>
+                </div>
+             </div>
       </div>
       <canvas id="mainCanvas" ></canvas>
             <script src="https://code.jquery.com/jquery.js"></script>

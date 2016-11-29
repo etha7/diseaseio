@@ -2,18 +2,19 @@
   "riskGraph": 
     {
       "riskTitle": "Safe vs Risk",
-      "riskDescription": "This graph shows the number of people who enter a safe node versus a risk node."
+      "riskDescription": "This graph shows the number of people who enter a safe node versus a risk node. Scientists are interested in understanding human behavior and this information can help reveal significant facts about human behavior in the face of reward and risk. The safe node has less resources but a higher chance of staying safe from disease outbreak. The risk node has more resources but a lower chance of staying safe from disease outbreak. With this data, psychologists and scientists can better understand risk aversion and risk-seeking behavior."
         
     },
   "trustGraph": 
     {
       "trustTitle": "Trust",
-      "trustDescription": "This is measured by comparing the percent chance of getting sick with percent who team up."
+      "trustDescription": "Trust is measured by comparing the percent chance of getting sick with percent who team up. Users can decide to team up with other users in order to gain more collective resources. Understanding how sickness can bind or isolate users will help scientist understand how users develop trust or use trust in order to deceive other players. This information will help psychologists and scientists better understand how reward motivates trust or deception."
         
     },
   "moralityGraph": 
     {
       "moralityTitle": "Morality",
-      "moralityDescription": "This is measured by comparing the percent sick and on a team with percent sick and not on a team." 
+      "moralityDescription": "Trust is measured by comparing the percent chance of getting sick with percent who team up. Users can decide to team up with other users in order to gain more collective resources. Understanding how sickness can bind or isolate users will help scientist understand how users develop trust or use trust in order to deceive other players. This information will help psychologists and scientists better understand how reward motivates trust or deception." 
     }
 }
+

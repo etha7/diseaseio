@@ -8,9 +8,11 @@ button {
     cursor: pointer;
     width: 100%;
 }
-button:hover{
-    color:#fff;
-    background-color:#a7aeec
+button:hover {
+    background-color: #28d056;
+    text-decoration: none;
+    font-weight:bold;
+    color: white;
 }
 </style>
 <html>
@@ -36,19 +38,25 @@ button:hover{
             <h4>Roles:</h4>
             <div id="buttonContainer">
               <div class="row">
-                <div class="col-sm-6" style="background-color:yellow;">
+                <div class="col-sm-6" style="background-color:white;">
                   <button id="scientistButton">Scientist</button>
               </div>
-              <div class="col-sm-6" style="background-color:pink;">
+              <div class="col-sm-6" style="background-color:white;">
                 <button id="mapButton">Citizen</button>
               </div>
             </div>
-           </div>
+            <br><br><br>
+            <div class="row">
+              <div class="col-sm-6" style="background-color:white;">
+                <button id="aboutButton"
+                background:url('url-to-your-image')>What is disease.io?</button>
+              </div>
+              <div class="col-sm-6" style="background-color:white;">
+                <button id="helpButton"
+                background:url('url-to-your-image')>Learn How to Play</button>
+              </div>
       </div>
-            <div id="bottom-buttonContainer" align="center">
-               <button class="btn btn-primary" id="aboutButton">About</button>
-               <button class="btn btn-primary" id="helpButton" >Help</button>
-            </div>
+
       <script src="https://code.jquery.com/jquery.js"></script>
       <script src="js/bootstrap.min.js"></script>
       <script src="js/initializeIndex.js"></script>

@@ -14,7 +14,7 @@
 }
 
 .button:hover {
-    background-color: #28d056;
+    background-color: #00ff00;
     text-decoration: none;
     font-weight:bold;
     color: white;
@@ -36,7 +36,7 @@ float: none
 /* applies to any <p> descendants of an element of class "example-class-selector" */
 .example-class-selector p {
 	/* Colors are in hexadecimal: http://www.colorpicker.com/ */	
-	color: #CC00AA;
+	color: green  /*#CC00AA;&/
 }
 
 .jumbotron {
