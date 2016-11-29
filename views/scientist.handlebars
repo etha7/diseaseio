@@ -103,7 +103,8 @@
         //drawToolbar();
 
         <!-- @cloudformatter calls to render the SVG -->
-    
+   
+         jQuery('#buttons').empty();
         <!-- Convert the SVG to PDF and download it -->
         var click="return xepOnline.Formatter.Format('JSFiddle', {render:'download', srctype:'svg'})";
         jQuery('#buttons').append('<button onclick="'+ click +'">PDF</button>');

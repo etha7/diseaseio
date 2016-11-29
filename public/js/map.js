@@ -5,6 +5,10 @@ var canvasLeft = canvas.offsetLeft,
 var context = canvas.getContext("2d");
 var clickableElements = [];
 var socket;
+var safeClicked = true;
+var safeCount = 0;
+var riskCount = 0;
+var jsonSource = "public/json/mapGraph.json";
 
 canvas.width  = window.innerWidth;
 canvas.height = window.innerHeight; 
@@ -19,10 +23,51 @@ function mapMain(){
    createjs.Touch.enable(stage);
 
    socket = io.connect();
- 
-   //Test writing a file
-   socket.emit("write", { filename: "public/testfile.txt", content: "BEEEEEEEEST" });
-   console.log("writing to testfile.txt from client");
+
+
+    //Read data form mapGraph.json, then write back
+    var selectionButton = document.getElementById("game-start-button");
+       selectionButton.addEventListener('click', function(event) {
+       //var fs = require('fs');
+       if(safeClicked) {
+          //Read from json source
+          $.get('data', function(data) {   
+             var json = data;
+             console.log(data);
+             
+             //Row, column
+             safeCount = parseInt(json["rows"]["0"]["c"]["1"]["v"]);
+             console.log(safeCount);
+             safeCount++;
+             json["rows"]["0"]["c"]["1"]["v"] = safeCount.toString();
+             console.log(JSON.stringify(json));
+            
+             console.log("Safe count is " + safeCount);
+             //Write back to file
+             socket.emit("write", { filename: jsonSource, 
+                content:  JSON.stringify(json)
+             }); 
+             console.log("Writing to "+jsonSource+" from client");
+             }); 
+                                                                                                                                                                                                                                                                                           }   
+       else {
+          //Read from json source
+          $.get('data', function(data) {
+             console.log(data);
+             var json = data;
+             //Row, column
+             riskCount = parseInt(json["rows"]["1"]["c"]["1"]["v"]);
+             riskCount++;
+             json["rows"]["1"]["c"]["1"]["v"] = riskCount.toString();
+             console.log("Risk count is " + riskCount);
+             //Write back to file
+             socket.emit("write", { filename: jsonSource,
+             content:  JSON.stringify(json)
+             });
+             console.log("Writing to "+jsonSource+"from client");
+          });
+       }
+});
 
    //Resize canvas on window resize   
    window.addEventListener('click', function(event) {
@@ -59,8 +104,8 @@ function mapMain(){
    
    //function initText(stage, canvas, text, color, xpos, ypos){
    
-   var helpText1 = initText(stage, canvas, "The location you have selected is represented", "blue", canvas.width/3, canvas.height/10);
-   var helpText2 = initText(stage, canvas, "as a blue dot, click elsewhere to move selected position", "blue", canvas.width/3, canvas.height/8);
+   //var helpText1 = initText(stage, canvas, "The location you have selected is represented", "white", canvas.width/3, canvas.height/10);
+  // var helpText2 = initText(stage, canvas, "as a white dot, click elsewhere to move selected position", "white", canvas.width/3, canvas.height/8);
    var citySelectionText = initCitySelectionText(stage,canvas);
    citySelectionText.color = "green";
    var safeCity = new City({x: canvas.width/6, y: canvas.height/2}, "green", stage, "Safe", citySelectionText);
@@ -146,10 +191,6 @@ function easelObject(pos, color){
    this.easelShape = new createjs.Shape();
    this.getEaselShape = function(){ return this.easelShape; };
 
-   this.test = function(pos) { this.getEaselShape().x = pos.x; this.getEaselShape().y = pos.y;};
-   this.test({x: 10, y: 11});
-   console.log(this.getEaselShape().x);
-   console.log(this.getEaselShape().y);
 
    //Set initial position
    this.easelShape.x = pos.x;
@@ -226,11 +267,11 @@ function Circle(pos, color, radius ){
 
 function Resource(value){
    Circle.call(this, {x: 0, y: 0}, "blue", 10);
+   Circle.call(this, playerPos, "grey", 30);
    this.value = value;
 }
 
 function DiseaseZone(playerPos){
-   Circle.call(this, playerPos, "grey", 30);
    this.invertIsDotted();
 }
 
@@ -404,7 +445,7 @@ function City(pos, baseColor, stage, type, citySelectionText){
 
    if(type === "Safe") {
       this.stickSize = 25;
-      this.stickColor = "blue";
+      this.stickColor = "white"; 
       this.stick =  new Circle(this.pos, this.stickColor, this.stickSize);
 
    } else { 
@@ -431,7 +472,8 @@ function City(pos, baseColor, stage, type, citySelectionText){
            safeClicked = false;
         }
         var stickSize = 25;
-        var stickColor = "blue";
+
+        var stickColor = "white"; //
         var stick =  new Circle(pos, stickColor, stickSize);
         citySelectionText.text = "City Selection: " + type;
         citySelectionText.color = baseColor;

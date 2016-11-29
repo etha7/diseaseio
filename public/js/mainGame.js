@@ -22,7 +22,8 @@ var gameport = 8080; //port clients will connect to
 var canvas = document.getElementById("mainCanvas");
 var context = canvas.getContext("2d");
 canvas.width  = window.innerWidth;
-canvas.height = window.innerHeight; 
+canvas.height = window.innerHeight - window.innerHeight/3; 
+//make canvas smaller, so divs at the top don't require scrolling
 
 var stage        = new createjs.Stage("mainCanvas");
 
@@ -60,7 +61,7 @@ function main(){
    //Resize canvas on window resize   
    window.addEventListener("resize", function(){
       stage.canvas.width  = window.innerWidth;
-      stage.canvas.height = window.innerHeight;
+      stage.canvas.height = window.innerHeight - window.innerHeight/3;
       background.width    = window.innerWidth;
       background.height   = window.innerHeight;
       background.draw();
