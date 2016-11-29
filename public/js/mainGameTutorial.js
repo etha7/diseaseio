@@ -3,8 +3,12 @@ video.src = 'videos/gameTutorial.mp4';
 video.autoplay = true;
 video.loop = true;
 video.style.width = "100%";
-video.play();
 
+video.addEventListener('click', function(){
+   video.play();
+}, false);
+
+video.click();
 
 
 var canvas = document.getElementById('mainCanvas');
