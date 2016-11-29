@@ -3,6 +3,7 @@ video.src = 'videos/gameTutorial.mp4';
 video.autoplay = true;
 video.loop = true;
 video.style.width = "100%";
+video.play();
 
 
 
