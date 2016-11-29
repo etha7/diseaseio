@@ -23,10 +23,32 @@ button {
     display: inline-block;
     font-size: 16px;
 }
+
+/*
 button:hover{
     color:#fff;
     background-color:#a7aeec
 }
+*/
+
+/*
+button {
+    background-color: #7bc2fd;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+}
+*/
+button:hover {
+    background-color: #28d056;
+    text-decoration: none;
+    font-weight:bold;
+    color: white;
+}
+
  body {
     overflow-x: hidden;
  }
